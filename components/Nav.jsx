@@ -8,13 +8,15 @@ import { singIn, singOut, useSession, getProviders } from 'next-auth/react';
 const Nav = () => {
     
     const isUserLoggedIn = true;
+
     const [providers, setProviders] = useState(null);
+    const [toggleDropdown, setToggleDropdown] = useState(false);
     
     useEffect(() => {
-        const setProviders = async () => {
+        const setProvider = async () => {
             const response = await getProviders();
 
-            setProviders(response);
+            setProvider(response);
         }
 
         setProviders();
@@ -80,8 +82,36 @@ const Nav = () => {
                       height={37}
                       className="rounded-fill"
                       alt="profile"
-                      onClick={() => {}}
+                      onClick={() => setToggleDropdown((prev) => !prev)}
                     />
+                    {toggleDropdown && (
+                      <div className="dropdown">
+                        <Link
+                          href="/profile"
+                          className="dropdown_link"
+                          onClick={() => setToggleDropdown(false)}
+                        >
+                          Profilo
+                        </Link>
+                        <Link
+                          href="/create-prompt"
+                          className="dropdown_link"
+                          onClick={() => setToggleDropdown(false)}
+                        >
+                          Crea Prompt
+                        </Link>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setToggleDropdown(false)
+                            singOut();
+                          }}
+                          className="mt-5 w-full black_btn"
+                        >
+                          Disconnetta
+                        </button>
+                      </div>
+                    )}
                 </div>
             ) : (
                 <>
